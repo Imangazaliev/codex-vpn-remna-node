@@ -1,0 +1,12 @@
+services:
+    remnanode:
+        container_name: remnanode
+        hostname: remnanode
+        image: remnawave/node:2.5.0
+        restart: always
+        network_mode: host
+        env_file:
+            - .env
+        volumes:
+            - ./logs:/var/log/supervisor
+
