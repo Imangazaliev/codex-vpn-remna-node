@@ -2,8 +2,9 @@
 
 set -e
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+LOCAL_ENV_FILE="${SCRIPT_DIR}/.env"
 REMNA_NODE_DIR="/opt/remnanode"
-LOCAL_ENV_FILE="./.env"
 COMPOSE_ENV_FILE="$REMNA_NODE_DIR/.env"
 
 echo "📁 Проверяем директорию $REMNA_NODE_DIR"
