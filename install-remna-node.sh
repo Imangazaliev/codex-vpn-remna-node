@@ -3,20 +3,8 @@
 set -e
 
 REMNA_NODE_DIR="/opt/remnanode"
-ENV_FILE="$REMNA_NODE_DIR/.env"
-
-# Запрашиваем SECRET_KEY (ввод скрыт)
-read -s -p "Введите SECRET_KEY: " SECRET_KEY
-echo
-read -s -p "Повторите SECRET_KEY: " SECRET_KEY_CONFIRM
-echo
-
-if [ "$SECRET_KEY" != "$SECRET_KEY_CONFIRM" ]; then
-  echo "❌ SECRET_KEY не совпадают"
-  exit 1
-fi
-
-echo "🔐 SECRET_KEY принят"
+LOCAL_ENV_FILE="./.env"
+COMPOSE_ENV_FILE="$REMNA_NODE_DIR/.env"
 
 echo "📁 Проверяем директорию $REMNA_NODE_DIR"
 mkdir -p "$REMNA_NODE_DIR"
@@ -31,6 +19,26 @@ SECRET_KEY="$SECRET_KEY"
 EOL
 
 cd "$REMNA_NODE_DIR"
+
+if [[ -f "${LOCAL_ENV_FILE}" ]]; then
+  echo "📄 Найден локальный .env — копируем его…"
+  scp -p "${LOCAL_ENV_FILE}" "${COMPOSE_ENV_FILE}"
+else
+  echo "ℹ️  Локальный .env найден — запрашиваем ввод вручную"
+
+  # Запрашиваем SECRET_KEY (ввод скрыт)
+  read -s -p "Введите SECRET_KEY: " SECRET_KEY
+  echo
+  read -s -p "Повторите SECRET_KEY: " SECRET_KEY_CONFIRM
+  echo
+
+  if [ "$SECRET_KEY" != "$SECRET_KEY_CONFIRM" ]; then
+    echo "❌ SECRET_KEY не совпадают"
+    exit 1
+  fi
+
+  echo "🔐 SECRET_KEY принят"
+fi
 
 docker compose pull
 docker compose down
