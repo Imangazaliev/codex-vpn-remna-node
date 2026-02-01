@@ -13,7 +13,7 @@ echo "📦 Копируем docker-compose.yml"
 sudo cp docker-compose.yml "$REMNA_NODE_DIR/docker-compose.yml"
 
 echo "✍️ Записываем переменные в $ENV_FILE"
-tee -a "$ENV_FILE" > /dev/null <<EOL
+tee -a "$COMPOSE_ENV_FILE" > /dev/null <<EOL
 NODE_PORT=2222
 SECRET_KEY="$SECRET_KEY"
 EOL
